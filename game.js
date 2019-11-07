@@ -1,3 +1,6 @@
+//PRVA VERZIJA//
+//SADRZI SAMO BROD I NJEGOVO POMJERANJE//
+
 //napravim canvas i ctx
 let canvas = document.getElementById('myCanvas');
 canvas.width = window.innerWidth;
