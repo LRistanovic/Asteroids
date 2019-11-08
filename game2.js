@@ -300,7 +300,10 @@ function update(animationTime) {
                Math.sqrt(Math.pow(shipPointX2-astX, 2) + Math.pow(shipPointY2-astY, 2)) <= astRadius ||
                Math.sqrt(Math.pow(shipPointX3-astX, 2) + Math.pow(shipPointY3-astY, 2)) <= astRadius ) {
                 ctx.font = '50px Arial';
-                ctx.strokeText('GAME OVER', canvas.width / 2 - 80, canvas.height / 2 + 15);
+                ctx.strokeStyle = 'white';
+                ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
+                ctx.font = "40px Arial";
+                ctx.strokeText('Score:'+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
                 gameOver = true;
             }
         }
