@@ -218,7 +218,7 @@ function update(animationTime) {
             //shipPointX i shipPointY su koordinate vrha broda
             
 
-            //odreduje gdje ce nastati asteroid i njihov pravac
+            //odreduje sa koje strane ce nastati asteroid
             let side = Math.floor(Math.random()*4);
             let randomAsteroidX = Math.floor(Math.random()*canvas.width);
             let randomAsteroidY = Math.floor(Math.random()*canvas.height);
@@ -248,7 +248,7 @@ function update(animationTime) {
             if(asteroids[i].dir > 360) asteroids[i].dir = asteroids[i].dir - 360;
             asteroids[i].x += Math.sin(asteroids[i].dir * Math.PI / 180) * 150 * deltaTime;//pomjeram
             asteroids[i].y -= Math.cos(asteroids[i].dir * Math.PI / 180) * 150 * deltaTime;//asteroid
-            //provjeravam da li je citav asteroid izasao iz canvasa i ako jeste izacice na drugu stranu kao ship
+            //provjeravam da li je citav asteroid izasao iz canvasa da ne bi lagovalo
             if(asteroids[i].x < -101) 
                 asteroids[i].x = canvas.width + 100;
             
@@ -272,7 +272,7 @@ function update(animationTime) {
 
                 if(Math.sqrt(Math.pow(bulX-astX, 2) + Math.pow(bulY-astY, 2)) <= astRadius) {
                     bullets.splice(m, 1);
-                    if(asteroids[i].size > 0) {//ako jeste i nije najmanji size napravi dva manja asteroida
+                    if(asteroids[i].size > 0) {//ako jeste i nije najmanji napravi dva manja asteroida
                         let asteroid1 = new Asteroid(astX+ Math.sin((asteroids[i].dir+90) * Math.PI / 180), astY - Math.cos((asteroids[i].dir+90) * Math.PI / 180), asteroids[i].size-1, asteroids[i].dir+90);
                         let asteroid2 = new Asteroid(astX+ Math.sin((asteroids[i].dir-90) * Math.PI / 180), astY - Math.cos((asteroids[i].dir-90) * Math.PI / 180), asteroids[i].size-1, asteroids[i].dir-90);
                         asteroids[asteroids.length] = asteroid1;
@@ -289,21 +289,12 @@ function update(animationTime) {
             let astX = asteroids[i].x;
             let astY = asteroids[i].y;
             let astRadius = 25*Math.pow(2, asteroids[i].size);
-            let shipPointX1 = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;// tjeme 1
-            let shipPointY1 = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
-            let shipPointX2 = ship.x + Math.sin(ship.dir * Math.PI / 180) * 8;// tjeme 2
-            let shipPointY2 = ship.y - Math.cos(ship.dir * Math.PI / 180) * 8;
-            let shipPointX3 = ship.x + Math.sin(ship.dir * Math.PI / 180) * -8;//tjeme 3
-            let shipPointY3 = ship.y - Math.cos(ship.dir * Math.PI / 180) * 8;
-            //provjerim ako su bila koja od ta tri tjemena u asteroidu
-            if(Math.sqrt(Math.pow(shipPointX1-astX, 2) + Math.pow(shipPointY1-astY, 2)) <= astRadius ||
-               Math.sqrt(Math.pow(shipPointX2-astX, 2) + Math.pow(shipPointY2-astY, 2)) <= astRadius ||
-               Math.sqrt(Math.pow(shipPointX3-astX, 2) + Math.pow(shipPointY3-astY, 2)) <= astRadius ) {//ako jeste onda je gameover
+            let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
+            let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;//tjeme od ship
+            //provjerim ako je tjeme u asteroidu
+            if(Math.sqrt(Math.pow(shipPointX-astX, 2) + Math.pow(shipPointY-astY, 2)) <= astRadius) {
                 ctx.font = '50px Arial';
-                ctx.strokeStyle = 'white';
-                ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
-                ctx.font = "40px Arial";
-                ctx.strokeText('Score:'+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
+                ctx.strokeText('GAME OVER', canvas.width / 2 - 80, canvas.height / 2 + 15);
                 gameOver = true;
             }
         }
@@ -322,12 +313,12 @@ function update(animationTime) {
         ctx.strokeText('START', canvas.width / 2 - 80, canvas.height / 2 + 15);
     }
 
-    //samo pozove funkciju ako nisi jos izgubio
+    //kao i uvijek
     if (gameOver == false) {
         window.requestAnimationFrame(() => update(lastAnimationTime));
     }
 }
-//samo pozove funkciju ako nisi jos izgubio
+
 if (gameOver == false) {
     update();
 }
