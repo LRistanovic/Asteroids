@@ -20,7 +20,8 @@ let ship = {x: canvas.width/2,
     dir: 0, 
     rotating: 'stop', 
     moving: false, 
-    shooting: false};
+    shooting: false
+    };
 
 //gledam da li je neki taster pritisnut
 document.addEventListener('keydown', function(e) {
@@ -96,23 +97,66 @@ class Bullet {
 };
 
 //klasa za asteroidi
-class Asteroid {
+class bigAsteroid {
     x;
     y;
-    size;
     dir;
-    constructor(x1, y1, s, d) {
+    constructor(x1, y1, d) {
         this.x = x1;
         this.y = y1;
-        this.size = s;
         this.dir = d;
+        this.HP = 5;
+        this.radius = 100;
    }
     //iscrtavam ih kao krugove
     draw() {
-        let r = 25* Math.pow(2, this.size);//za size 0,1,2 r je 25,50,100
         ctx.beginPath();
-        ctx.moveTo(this.x + r, this.y);
-        ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+        ctx.moveTo(this.x + this.radius, this.y);
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'white';
+        ctx.stroke();
+        ctx.closePath();
+    }
+};
+
+class mediumAsteroid {
+    x;
+    y;
+    dir;
+    constructor(x1, y1, d) {
+        this.x = x1;
+        this.y = y1;
+        this.dir = d;
+        this.HP = 3;
+        this.radius = 50;
+   }
+    //iscrtavam ih kao krugove
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.x + this.radius, this.y);
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'white';
+        ctx.stroke();
+        ctx.closePath();
+    }
+};
+
+class smallAsteroid {
+    x;
+    y;
+    dir;
+    constructor(x1, y1, d) {
+        this.x = x1;
+        this.y = y1;
+        this.dir = d;
+        this.HP = 1;
+        this.radius = 25;
+   }
+    //iscrtavam ih kao krugove
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.x + this.radius, this.y);
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.strokeStyle = 'white';
         ctx.stroke();
         ctx.closePath();
@@ -214,9 +258,7 @@ function update(animationTime) {
         }
 
         //pravljenje asteroida
-        if(score >= 0 && Date.now() > lastAsteroid + 2000/(Math.floor(score/19)+1)) {//ako je proslo minimum 2000ms od proslog asteroida, postepeno se ubrzava za svaki 20 score
-            //shipPointX i shipPointY su koordinate vrha broda
-            
+        if(score >= 0 && Date.now() > lastAsteroid + 2000/(Math.floor(score/39)+1)) {//ako je proslo minimum 2000ms od proslog asteroida, postepeno se ubrzava za svaki 20 score
 
             //odreduje sa koje strane ce nastati asteroid
             let side = Math.floor(Math.random()*4);
@@ -227,16 +269,26 @@ function update(animationTime) {
             let asteroid;
 
             if(side == 0) {
-                asteroid = new Asteroid(-100, randomAsteroidY, randomAsteroidSize, randomAsteroidDir);
+                randomAsteroidX = -100;
             }
             else if(side == 1){
-                asteroid = new Asteroid(randomAsteroidX, -100, randomAsteroidSize, randomAsteroidDir);
+                randomAsteroidY = -100;
             }
             else if(side == 2){
-                asteroid = new Asteroid(canvas.width+100, randomAsteroidY, randomAsteroidSize, randomAsteroidDir);
+                randomAsteroidX = canvas.width + 100;
             }
             else if(side == 3){
-                asteroid = new Asteroid(randomAsteroidX, canvas.height+100, randomAsteroidSize, randomAsteroidDir);
+                randomAsteroidY = canvas.height + 100;
+            }
+
+            if(randomAsteroidSize == 0) {
+                asteroid = new bigAsteroid(randomAsteroidX, randomAsteroidY, randomAsteroidDir);
+            }
+            else if(randomAsteroidSize == 1) {
+                asteroid = new mediumAsteroid(randomAsteroidX, randomAsteroidY, randomAsteroidDir);
+            }
+            else if(randomAsteroidSize == 2) {
+                asteroid = new smallAsteroid(randomAsteroidX, randomAsteroidY, randomAsteroidDir);
             }
             
             asteroids[asteroids.length] = asteroid;//dodam ga u array
@@ -248,7 +300,7 @@ function update(animationTime) {
             if(asteroids[i].dir > 360) asteroids[i].dir = asteroids[i].dir - 360;
             asteroids[i].x += Math.sin(asteroids[i].dir * Math.PI / 180) * 150 * deltaTime;//pomjeram
             asteroids[i].y -= Math.cos(asteroids[i].dir * Math.PI / 180) * 150 * deltaTime;//asteroid
-            //provjeravam da li je citav asteroid izasao iz canvasa da ne bi lagovalo
+            //provjeravam da li je citav asteroid izasao iz canvasa
             if(asteroids[i].x < -101) 
                 asteroids[i].x = canvas.width + 100;
             
@@ -265,22 +317,31 @@ function update(animationTime) {
         for(let i = 0; i < asteroids.length; i++) {
             let astX = asteroids[i].x;
             let astY = asteroids[i].y;
-            let astRadius = 25*Math.pow(2, asteroids[i].size);
+            let astDir = asteroids[i].dir;
+            let astRadius = asteroids[i].radius;
             for(let m = 0; m < bullets.length; m++) {
                 let bulX = bullets[m].x;
                 let bulY = bullets[m].y;
 
                 if(Math.sqrt(Math.pow(bulX-astX, 2) + Math.pow(bulY-astY, 2)) <= astRadius) {
                     bullets.splice(m, 1);
-                    if(asteroids[i].size > 0) {//ako jeste i nije najmanji napravi dva manja asteroida
-                        let asteroid1 = new Asteroid(astX+ Math.sin((asteroids[i].dir+90) * Math.PI / 180), astY - Math.cos((asteroids[i].dir+90) * Math.PI / 180), asteroids[i].size-1, asteroids[i].dir+90);
-                        let asteroid2 = new Asteroid(astX+ Math.sin((asteroids[i].dir-90) * Math.PI / 180), astY - Math.cos((asteroids[i].dir-90) * Math.PI / 180), asteroids[i].size-1, asteroids[i].dir-90);
-                        asteroids[asteroids.length] = asteroid1;
-                        asteroids[asteroids.length] = asteroid2;
-                        asteroids.splice(i, 1);
+                    asteroids[i].HP--;
+                    if (asteroids[i].HP == 0) {
+                        if(astRadius == 100) {//ako jeste i nije najmanji napravi dva manja asteroida
+                            let asteroid1 = new mediumAsteroid(astX+ Math.sin((astDir+90) * Math.PI / 180), astY - Math.cos((astDir+90) * Math.PI / 180), astDir+90);
+                            let asteroid2 = new mediumAsteroid(astX+ Math.sin((astDir-90) * Math.PI / 180), astY - Math.cos((astDir-90) * Math.PI / 180), astDir-90);
+                            asteroids[asteroids.length] = asteroid1;
+                            asteroids[asteroids.length] = asteroid2;
+                        }
+                        else if(astRadius == 50) {//ako jeste i nije najmanji napravi dva manja asteroida
+                            let asteroid1 = new smallAsteroid(astX+ Math.sin((astDir+90) * Math.PI / 180), astY - Math.cos((astDir+90) * Math.PI / 180), astDir+90);
+                            let asteroid2 = new smallAsteroid(astX+ Math.sin((astDir-90) * Math.PI / 180), astY - Math.cos((astDir-90) * Math.PI / 180), astDir-90);
+                            asteroids[asteroids.length] = asteroid1;
+                            asteroids[asteroids.length] = asteroid2;
+                        }
+                        asteroids.splice(i, 1);//izbrise udareni asteroid
+                        score++;
                     }
-                    asteroids.splice(i, 1);//izbrise udareni asteroid
-                    score++;
                 }
             }
         }
@@ -288,13 +349,22 @@ function update(animationTime) {
         for(let i = 0; i < asteroids.length; i++) {
             let astX = asteroids[i].x;
             let astY = asteroids[i].y;
-            let astRadius = 25*Math.pow(2, asteroids[i].size);
-            let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
-            let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;//tjeme od ship
-            //provjerim ako je tjeme u asteroidu
-            if(Math.sqrt(Math.pow(shipPointX-astX, 2) + Math.pow(shipPointY-astY, 2)) <= astRadius) {
+            let astRadius = asteroids[i].radius;
+            let shipPointX1 = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
+            let shipPointY1 = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
+            let shipPointX2 = ship.x + Math.sin(ship.dir * Math.PI / 180) * -8;
+            let shipPointY2 = ship.y - Math.cos(ship.dir * Math.PI / 180) * -8;
+            let shipPointX3 = ship.x + Math.sin(ship.dir * Math.PI / 180) * 8;
+            let shipPointY3 = ship.y - Math.cos(ship.dir * Math.PI / 180) * -8;//tri tjeme od ship
+            //provjerim ako su bila koja od ta tri tjemena u asteroidu
+            if(Math.sqrt(Math.pow(shipPointX1-astX, 2) + Math.pow(shipPointY1-astY, 2)) <= astRadius ||
+               Math.sqrt(Math.pow(shipPointX2-astX, 2) + Math.pow(shipPointY2-astY, 2)) <= astRadius ||
+               Math.sqrt(Math.pow(shipPointX3-astX, 2) + Math.pow(shipPointY3-astY, 2)) <= astRadius ) {
                 ctx.font = '50px Arial';
-                ctx.strokeText('GAME OVER', canvas.width / 2 - 80, canvas.height / 2 + 15);
+                ctx.strokeStyle = 'white';
+                ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
+                ctx.font = "40px Arial";
+                ctx.strokeText('Score:'+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
                 gameOver = true;
             }
         }
@@ -327,5 +397,5 @@ if (gameOver == false) {
 function drawScore(){
     ctx.font = "16px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText("Score:"+score,8,20);
+    ctx.fillText('Score:'+score, 8,20);
 }
