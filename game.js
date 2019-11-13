@@ -1,24 +1,27 @@
-//VERZIJA 0.2//
-//SADRZI BROD SA POTPUNIM POMJERANJEM I MOGUCNOST DA PUCA//
-
 //napravim canvas i ctx
 let canvas = document.getElementById('myCanvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let ctx = canvas.getContext('2d');
-let gamestarted = false;
 
 //napravim pozadinu
 let background = new Image();
-background.src = '../Pictures/background.png';
+background.src = 'background.png';
 
 let score = 0;
 let points = 0;
 
+//koji je screen i ostala govna
+let startScreen = true;
+let game = false;
+let gameOver = false;
+let helpScreen = false;
+
 //STVARI ZA GAMEPLAY//
 
 //napravim brod i stavim ga na sredinu canvasa
-let ship = {x: canvas.width/2, 
+let ship = {
+    x: canvas.width/2, 
     y: canvas.height/2, 
     dir: 0, 
     rotating: 'stop', 
@@ -141,15 +144,33 @@ class bigAsteroid {
         this.HP = 15;
         this.radius = 100;
         this.speed = 75;
+        this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
+        this.rotationSpeed = 10;
+        this.drawDir = Math.floor(Math.random() * 360);
    }
     //iscrtavam ih kao krugove
     draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(this.x + this.radius, this.y);
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'white';
+        ctx.moveTo(0, 0 - 100);
+        ctx.lineTo(0 + 30, 0 - 90);
+        ctx.lineTo(0 + 80, 0 - 50);
+        ctx.lineTo(0 + 100, 0);
+        ctx.lineTo(0 + 93, 0 + 30);
+        ctx.lineTo(0 + 53, 0 + 90);
+        ctx.lineTo(0, 0 + 100);
+        ctx.lineTo(0 - 25, 0 + 90);
+        ctx.lineTo(0 - 75, 0 + 50);
+        ctx.lineTo(0 - 95, 0 + 20)
+        ctx.lineTo(0 - 100, 0);
+        ctx.lineTo(0 - 95, 0 - 30);
+        ctx.lineTo(0 - 55, 0 - 80)
+        ctx.lineTo(0, 0 - 100);
         ctx.stroke();
         ctx.closePath();
+        ctx.restore();
     }
 };
 
@@ -163,16 +184,34 @@ class mediumAsteroid {
         this.dir = d;
         this.HP = 8;
         this.radius = 50;
-        this.speed = 100
+        this.speed = 100;
+        this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
+        this.rotationSpeed = 17;
+        this.drawDir = Math.floor(Math.random() * 360);
    }
     //iscrtavam ih kao krugove
     draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(this.x + this.radius, this.y);
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'white';
+        ctx.moveTo(0, 0 - 50);
+        ctx.lineTo(0 + 15, 0 - 45);
+        ctx.lineTo(0 + 40, 0 - 25);
+        ctx.lineTo(0 + 50, 0);
+        ctx.lineTo(0 + 46.5, 0 + 15);
+        ctx.lineTo(0 + 26.5, 0 + 45);
+        ctx.lineTo(0, 0 + 50);
+        ctx.lineTo(0 - 12.5, 0 + 45);
+        ctx.lineTo(0 - 37.5, 0 + 25);
+        ctx.lineTo(0 - 47.5, 0 + 10)
+        ctx.lineTo(0 - 50, 0);
+        ctx.lineTo(0 - 47.5, 0 - 15);
+        ctx.lineTo(0 - 27.5, 0 - 40)
+        ctx.lineTo(0, 0 - 50);
         ctx.stroke();
         ctx.closePath();
+        ctx.restore();
     }
 };
 
@@ -186,16 +225,34 @@ class smallAsteroid {
         this.dir = d;
         this.HP = 2;
         this.radius = 25;
-        this.speed = 150
+        this.speed = 150;
+        this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
+        this.rotationSpeed = 30;
+        this.drawDir = Math.floor(Math.random() * 360);
    }
     //iscrtavam ih kao krugove
     draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(this.x + this.radius, this.y);
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'white';
+        ctx.moveTo(0, 0 - 25);
+        ctx.lineTo(0 + 7.5, 0 - 22.5);
+        ctx.lineTo(0 + 20, 0 - 12.5);
+        ctx.lineTo(0 + 25, 0);
+        ctx.lineTo(0 + 23.25, 0 + 7.5);
+        ctx.lineTo(0 + 13.25, 0 + 22.5);
+        ctx.lineTo(0, 0 + 25);
+        ctx.lineTo(0 - 6.25, 0 + 22.5);
+        ctx.lineTo(0 - 18.75, 0 + 12.25);
+        ctx.lineTo(0 - 23.75, 0 + 5)
+        ctx.lineTo(0 - 25, 0);
+        ctx.lineTo(0 - 23.5, 0 - 7.5);
+        ctx.lineTo(0 - 13.75, 0 - 20)
+        ctx.lineTo(0, 0 - 25);
         ctx.stroke();
         ctx.closePath();
+        ctx.restore();
     }
 };
 
@@ -206,25 +263,78 @@ let asteroids = [];
 //da ne bi bilo op i da ima prostora za power-up
 let lastShot = 0;
 let lastAsteroid = 0;
-//promjenljiva za ako umres
-let gameOver = false;
 
 //STVARI ZA POCETNI SCREEN//
 
 let mouseOverStartButton = false;
+let mouseOverHelpButton = false;
 
 document.addEventListener('mousemove', function(e) {
     if(e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
         mouseOverStartButton = true;
     }
     else mouseOverStartButton = false;
+    //canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50
+    if(e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
+        mouseOverHelpButton = true;
+    }
+    else mouseOverHelpButton = false;
 });
 document.addEventListener('click', function(e) {
-    if(e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
-        gamestarted = true;
+    if(startScreen && e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
+        game = true;
+        startScreen = false;
+    }
+    if(e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
+        helpScreen = true;
+        startScreen = false;
     }
 });
 
+//STVARI ZA HELP SCREEN
+let mouseOverBackButton = false;
+
+document.addEventListener('mousemove', function(e) {
+    //ctx.strokeRect(canvas.width - 200, 50, 140, 50);
+    if(e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
+        mouseOverBackButton = true;
+    }
+    else mouseOverBackButton = false;
+});
+document.addEventListener('click', function(e) {
+    if(e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
+        helpScreen = false;
+        startScreen = true;
+    }
+});
+
+//STVARI ZA GAMEOVERSCREEN
+let mouseOverMainMenuBtn = false;
+let mainMenuBtnClicked = false;
+let mouseOverRestartBtn = false;
+let restartBtnClicked = false;
+
+document.addEventListener('mousemove', function(e) {
+    if(e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+        mouseOverMainMenuBtn = true;
+    }
+    else mouseOverMainMenuBtn = false;
+    
+    if(e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+        mouseOverRestartBtn = true;
+    }
+    else mouseOverRestartBtn = false;
+});
+
+document.addEventListener('click', function(e) {
+    if(e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+        mainMenuBtnClicked = true;
+    }
+    
+    if(e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+        restartBtnClicked = true;
+    }
+});
 
 //glavna funkcija//
 function update(animationTime) {
@@ -235,7 +345,7 @@ function update(animationTime) {
 
     //crtam pozadinu
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    if(gamestarted) {//ako sam kliknuo 'START' dugme na pocetku
+    if(game) {//ako sam kliknuo 'START' dugme na pocetku
         //crtam brod i score
         drawShip();
         drawScore();
@@ -331,6 +441,7 @@ function update(animationTime) {
 
         for(let i = 0; i < asteroids.length; i++) {//prolazim kroz svaki asteroid
             asteroids[i].draw();//funkcija ugradjena u klasu
+            asteroids[i].drawDir += asteroids[i].rotationDir * asteroids[i].rotationSpeed * deltaTime;
             if(asteroids[i].dir > 360) asteroids[i].dir = asteroids[i].dir - 360;
             asteroids[i].x += Math.sin(asteroids[i].dir * Math.PI / 180) * asteroids[i].speed * deltaTime;//pomjeram
             asteroids[i].y -= Math.cos(asteroids[i].dir * Math.PI / 180) * asteroids[i].speed * deltaTime;//asteroid
@@ -395,17 +506,13 @@ function update(animationTime) {
             if(Math.sqrt(Math.pow(shipPointX1-astX, 2) + Math.pow(shipPointY1-astY, 2)) <= astRadius ||
                Math.sqrt(Math.pow(shipPointX2-astX, 2) + Math.pow(shipPointY2-astY, 2)) <= astRadius ||
                Math.sqrt(Math.pow(shipPointX3-astX, 2) + Math.pow(shipPointY3-astY, 2)) <= astRadius ) {
-                ctx.font = '50px Arial';
-                ctx.strokeStyle = 'white';
-                ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
-                ctx.font = "40px Arial";
-                ctx.strokeText('Score:'+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
+                game = false;
                 gameOver = true;
             }
         }
     }
     
-    else {//ako nisam jos kliknuo 'START' dugme
+    else if(startScreen){//ako nisam jos kliknuo 'START' dugme
         //posvijetlim dugme ako hoverujem misom preko njega
         if(mouseOverStartButton) {
             ctx.fillStyle = '#111111';
@@ -416,12 +523,76 @@ function update(animationTime) {
         ctx.strokeRect(canvas.width / 2 - 100, canvas.height / 2 - 50, 200, 100);
         ctx.font = '50px Arial';
         ctx.strokeText('START', canvas.width / 2 - 80, canvas.height / 2 + 15);
+
+        if(mouseOverHelpButton) {
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50);
+        }
+        ctx.font = '30px Arial';
+        ctx.strokeRect(canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50);
+        ctx.strokeText('HELP', canvas.width / 2 - 40, canvas.height / 2 + 105);
     }
 
-    //kao i uvijek
-    if (gameOver == false) {
-        window.requestAnimationFrame(() => update(lastAnimationTime));
+    else if(gameOver) {
+        ctx.font = '50px Arial';
+        ctx.strokeStyle = 'white';
+        ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
+        ctx.font = "40px Arial";
+        ctx.strokeText('Score: '+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
+        
+        if(mouseOverMainMenuBtn) {
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(canvas.width/2 - 150, canvas.height/2 + 110, 140, 50);
+        }
+        ctx.strokeRect(canvas.width/2 - 150, canvas.height/2 + 110, 140, 50);
+        ctx.font = '20px Arial';
+        ctx.strokeText('MAIN MENU', canvas.width / 2 - 137, canvas.height / 2 + 141.5);
+        
+        if(mouseOverRestartBtn) {
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(canvas.width/2 + 10, canvas.height/2 + 110, 140, 50);
+        }
+        ctx.strokeRect(canvas.width/2 + 10, canvas.height/2 + 110, 140, 50);
+        ctx.strokeText('RESTART', canvas.width / 2 + 35, canvas.height / 2 + 141.5);
+
+        if(mainMenuBtnClicked) {
+            document.location.reload();
+        }
+
+        if(restartBtnClicked) {
+            score = 0;
+            asteroids.splice(0, asteroids.length);
+            bullets.splice(0, bullets.length);
+            ship.x = canvas.width/2;
+            ship.y = canvas.height/2; 
+            ship.dir = 0;
+            ship.rotating = 'stop'; 
+            ship.moving = false;
+            ship.shooting = false;
+            ship.Speed = 120;
+            ship.Reload = 1;
+            ship.bulletDamage = 2;
+            ship.bulletSpeed = 1;
+
+            restartBtnClicked = false;
+            game = true;
+            gameOver = false;
+        }
     }
+
+    else if(helpScreen) {
+        ctx.font = '50px Arial';
+        ctx.strokeText('OVDE IDU UPUTSTVA', 50, 150);
+        if(mouseOverBackButton) {
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(canvas.width - 200, 50, 140, 50);
+        }
+        ctx.strokeRect(canvas.width - 200, 50, 140, 50);
+        ctx.font = '25px Arial';
+        ctx.strokeText('BACK', canvas.width - 165, 83);
+    }
+
+    window.requestAnimationFrame(() => update(lastAnimationTime));
 }
 
 if (gameOver == false) {
@@ -432,10 +603,10 @@ if (gameOver == false) {
 function drawScore(){
     ctx.font = "16px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText('Score:'+score, 8,20);
-    ctx.fillText('Points:'+points, 8,35);
-    ctx.fillText('Speed:'+ship.Speed, 8,canvas.height-15);
-    ctx.fillText('Reload:'+ship.Reload, 8,canvas.height-30);
-    ctx.fillText('Damage:'+ship.bulletDamage, 8,canvas.height-45);
-    ctx.fillText('Bullet Speed:'+ship.bulletSpeed, 8,canvas.height-60);
+    ctx.fillText('Score: '+score, 8,20);
+    ctx.fillText('Points: '+points, 8,35);
+    ctx.fillText('Speed: '+ship.Speed, 8,canvas.height-15);
+    ctx.fillText('Reload: '+ship.Reload, 8,canvas.height-30);
+    ctx.fillText('Damage: '+ship.bulletDamage, 8,canvas.height-45);
+    ctx.fillText('Bullet Speed: '+ship.bulletSpeed, 8,canvas.height-60);
 }
