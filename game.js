@@ -308,6 +308,58 @@ document.addEventListener('click', function(e) {
     }
 });
 
+function drawButtons() {
+    ctx.strokeStyle = 'white';
+
+    ctx.strokeRect(100, 100, 75, 75);
+    ctx.beginPath();
+    ctx.moveTo(137.5, 160);
+    ctx.lineTo(137.5, 115);
+    ctx.lineTo(157.5, 135);
+    ctx.moveTo(137.5, 115);
+    ctx.lineTo(117.5, 135)
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.strokeRect(100, 200, 75, 75);
+    ctx.beginPath();
+    ctx.moveTo(160, 237.5);
+    ctx.lineTo(115, 237.5);
+    ctx.lineTo(135, 217.5);
+    ctx.moveTo(115, 237.5);
+    ctx.lineTo(135, 257.5)
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.strokeRect(100, 300, 75, 75);
+    ctx.beginPath();
+    ctx.moveTo(115, 337.5);
+    ctx.lineTo(160, 337.5);
+    ctx.lineTo(140, 317.5);
+    ctx.moveTo(160, 337.5);
+    ctx.lineTo(140, 357.5)
+    ctx.stroke();    
+    ctx.closePath(); 
+    
+    ctx.strokeRect(100, 400, 75, 75);
+    ctx.font = '20px Arial';
+    ctx.strokeText('SPACE', 105, 445);
+
+    
+    ctx.strokeRect(700, 100, 75, 75);
+    ctx.font = '60px Arial';
+    ctx.strokeText('1', 720, 158);
+    
+    ctx.strokeRect(700, 200, 75, 75);
+    ctx.strokeText('2', 720, 258);
+    
+    ctx.strokeRect(700, 300, 75, 75);
+    ctx.strokeText('3', 720, 358);
+    
+    ctx.strokeRect(700, 400, 75, 75);
+    ctx.strokeText('4', 720, 458);
+}
+
 //STVARI ZA GAMEOVERSCREEN
 let mouseOverMainMenuBtn = false;
 let mainMenuBtnClicked = false;
@@ -581,8 +633,24 @@ function update(animationTime) {
     }
 
     else if(helpScreen) {
-        ctx.font = '50px Arial';
-        ctx.strokeText('OVDE IDU UPUTSTVA', 50, 150);
+        ctx.font = '35px Arial';
+        
+        ctx.strokeText('Move the ship forward', 200, 150);
+        ctx.strokeText('Rotate the ship left', 200, 250);
+        ctx.strokeText('Rotate the ship right', 200, 350);
+        ctx.strokeText('Shoot', 200, 450);
+
+        ctx.strokeText("Upgrade the ship's speed", 800, 150);
+        ctx.strokeText("Upgrade the ship's firerate", 800, 250);
+        ctx.strokeText("Upgrade the ship's bullet damage", 800, 350);
+        ctx.strokeText("Upgrade the ship's bullet speed", 800, 450);
+        
+        drawButtons();
+
+        ctx.font = '35px Arial';
+        ctx.strokeText('Destroy an asteroid to increment your score and points', 270, 540);
+        ctx.strokeText('To upgrade a stat, you need 5 points', 400, 600);
+
         if(mouseOverBackButton) {
             ctx.fillStyle = '#111111';
             ctx.fillRect(canvas.width - 200, 50, 140, 50);
