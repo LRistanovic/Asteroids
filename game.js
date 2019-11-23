@@ -6,7 +6,7 @@ let ctx = canvas.getContext('2d');
 
 //napravim pozadinu
 let background = new Image();
-background.src = 'background.png';
+background.src = 'images/background.png';
 
 let score = 0;
 let points = 0;
@@ -16,6 +16,22 @@ let startScreen = true;
 let game = false;
 let gameOver = false;
 let helpScreen = false;
+
+//audio
+
+let beep = new Audio();
+beep.src = 'sounds/beep.mp3';
+
+let blop = new Audio();
+blop.src = 'sounds/blop.mp3';
+blop.volume = 0.1;
+
+let gameOverSound = new Audio();
+gameOverSound.src = 'sounds/gameOver.mp3';
+
+let destroy = new Audio();
+destroy.src = 'sounds/destroy.mp3';
+destroy.volume = 0.1;
 
 //STVARI ZA GAMEPLAY//
 
@@ -284,10 +300,12 @@ document.addEventListener('click', function(e) {
     if(startScreen && e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
         game = true;
         startScreen = false;
+        beep.play();
     }
-    if(e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
+    if(startScreen & e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
         helpScreen = true;
         startScreen = false;
+        beep.play();
     }
 });
 
@@ -302,9 +320,10 @@ document.addEventListener('mousemove', function(e) {
     else mouseOverBackButton = false;
 });
 document.addEventListener('click', function(e) {
-    if(e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
+    if(helpScreen & e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
         helpScreen = false;
         startScreen = true;
+        beep.play();
     }
 });
 
@@ -379,14 +398,18 @@ document.addEventListener('mousemove', function(e) {
 });
 
 document.addEventListener('click', function(e) {
-    if(e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(gameOver & e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
         mainMenuBtnClicked = true;
+        beep.play();
     }
     
-    if(e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(gameOver & e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
         restartBtnClicked = true;
+        beep.play();
     }
 });
+
+
 
 //glavna funkcija//
 function update(animationTime) {
@@ -438,21 +461,22 @@ function update(animationTime) {
                 //shipPointX i shipPointY su koordinate vrha broda
                 let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
                 let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
-                let bullet = new Bullet(shipPointX, shipPointY, 1, ship.dir);//napravim novi metak
+                let bullet = new Bullet(shipPointX, shipPointY, 1.5, ship.dir);//napravim novi metak
                 bullets[bullets.length] = bullet;//dodam ga u array
                 lastShot = Date.now();//stavim da je zadnji metak opaljen sad
+                blop.play();
         }
 
         //crtanje metaka
         for(let i = 0; i < bullets.length; i++) {//prolazim kroz svaki metak
             bullets[i].draw();//funkcija ugradjena u klasu
-            bullets[i].x += Math.sin(bullets[i].dir * Math.PI / 180) * 200*ship.bulletSpeed * deltaTime;//pomjeram
-            bullets[i].y -= Math.cos(bullets[i].dir * Math.PI / 180) * 200*ship.bulletSpeed * deltaTime;//metak
+            bullets[i].x += Math.sin(bullets[i].dir * Math.PI / 180) * 230*ship.bulletSpeed * deltaTime;//pomjeram
+            bullets[i].y -= Math.cos(bullets[i].dir * Math.PI / 180) * 230*ship.bulletSpeed * deltaTime;//metak
             //provjeravam da li je metak izasao iz canvasa da ne bi lagovalo
             if(bullets[i].x < 0 || bullets[i].x > canvas.width || bullets[i].y < 0 || bullets[i].y > canvas.height) 
                 bullets.splice(i, 1);
         }
-
+        
         //pravljenje asteroida
         if(score >= 0 && Date.now() > lastAsteroid + 2000/(Math.floor(score/39)+1)) {//ako je proslo minimum 2000ms od proslog asteroida, postepeno se ubrzava za svaki 20 score
 
@@ -489,7 +513,7 @@ function update(animationTime) {
             
             asteroids[asteroids.length] = asteroid;//dodam ga u array
             lastAsteroid = Date.now();//stavim da je zadnji asteroid napravljen sad
-    }
+        }
 
         for(let i = 0; i < asteroids.length; i++) {//prolazim kroz svaki asteroid
             asteroids[i].draw();//funkcija ugradjena u klasu
@@ -539,11 +563,13 @@ function update(animationTime) {
                         asteroids.splice(i, 1);//izbrise udareni asteroid
                         score++;
                         points++;
+                        destroy.play();
                     }
                 }
             }
         }
 
+        //provjera da li je brod udario u neki asteroid
         for(let i = 0; i < asteroids.length; i++) {
             let astX = asteroids[i].x;
             let astY = asteroids[i].y;
@@ -558,8 +584,8 @@ function update(animationTime) {
             if(Math.sqrt(Math.pow(shipPointX1-astX, 2) + Math.pow(shipPointY1-astY, 2)) <= astRadius ||
                Math.sqrt(Math.pow(shipPointX2-astX, 2) + Math.pow(shipPointY2-astY, 2)) <= astRadius ||
                Math.sqrt(Math.pow(shipPointX3-astX, 2) + Math.pow(shipPointY3-astY, 2)) <= astRadius ) {
-                game = false;
-                gameOver = true;
+                gameOverSound.play();
+                window.setTimeout(function() {game = false; gameOver = true;}, 100);
             }
         }
     }
@@ -608,7 +634,7 @@ function update(animationTime) {
         ctx.strokeText('RESTART', canvas.width / 2 + 35, canvas.height / 2 + 141.5);
 
         if(mainMenuBtnClicked) {
-            document.location.reload();
+            window.setTimeout(() => document.location.reload(), 100);
         }
 
         if(restartBtnClicked) {
