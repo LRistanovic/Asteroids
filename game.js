@@ -700,7 +700,7 @@ function drawScore(){
     ctx.fillText('Score: '+score, 8,20);
     ctx.fillText('Points: '+points, 8,35);
     ctx.fillText('Bullet Speed: '+ship.bulletSpeed, 8,canvas.height-15);
-    ctx.fillText('Bullet Damage: '+ship.Damage, 8,canvas.height-30);
+    ctx.fillText('Bullet Damage: '+ship.bulletDamage, 8,canvas.height-30);
     ctx.fillText('Firerate: '+ship.Reload, 8,canvas.height-45);
     ctx.fillText('Speed: '+ship.Speed, 8,canvas.height-60);
 }
