@@ -639,6 +639,7 @@ function update(animationTime) {
 
         if(restartBtnClicked) {
             score = 0;
+            points = 0;
             asteroids.splice(0, asteroids.length);
             bullets.splice(0, bullets.length);
             ship.x = canvas.width/2;
