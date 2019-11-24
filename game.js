@@ -6,7 +6,7 @@ let ctx = canvas.getContext('2d');
 
 //napravim pozadinu
 let background = new Image();
-background.src = 'images/background.png';
+background.src = 'Game/images/background.png';
 
 let score = 0;
 let points = 0;
@@ -20,17 +20,17 @@ let helpScreen = false;
 //audio
 
 let beep = new Audio();
-beep.src = 'sounds/beep.mp3';
+beep.src = 'Game/sounds/beep.mp3';
 
 let blop = new Audio();
-blop.src = 'sounds/blop.mp3';
+blop.src = 'Game/sounds/blop.mp3';
 blop.volume = 0.1;
 
 let gameOverSound = new Audio();
-gameOverSound.src = 'sounds/gameOver.mp3';
+gameOverSound.src = 'Game/sounds/gameOver.mp3';
 
 let destroy = new Audio();
-destroy.src = 'sounds/destroy.mp3';
+destroy.src = 'Game/sounds/destroy.mp3';
 destroy.volume = 0.1;
 
 //STVARI ZA GAMEPLAY//
