@@ -17,6 +17,11 @@ let game = false;
 let gameOver = false;
 let helpScreen = false;
 
+let easyMode = true;
+let fontSize;
+
+let ratio = canvas.height/1008;
+
 //audio
 
 let beep = new Audio();
@@ -43,10 +48,10 @@ let ship = {
     rotating: 'stop', 
     moving: false, 
     shooting: false,
-    Speed: 120,
+    Speed: 120*ratio,
     Reload: 1,
     bulletDamage: 2,
-    bulletSpeed: 1
+    bulletSpeed: 1*ratio
     };
 
 //gledam da li je neki taster pritisnut
@@ -114,11 +119,11 @@ function drawShip() {
     ctx.translate(ship.x, ship.y);
     ctx.rotate(ship.dir * Math.PI / 180);
     ctx.beginPath();
-    ctx.moveTo(0, -16);
-    ctx.lineTo(8, 8);
+    ctx.moveTo(0, -16*ratio);
+    ctx.lineTo(8*ratio, 8*ratio);
     ctx.lineTo(0, 0);
-    ctx.lineTo(-8, 8);
-    ctx.lineTo(0, -16);
+    ctx.lineTo(-8*ratio, 8*ratio);
+    ctx.lineTo(0, -16*ratio);
     ctx.strokeStyle = 'white';
     ctx.stroke();
     ctx.closePath();
@@ -134,7 +139,7 @@ class Bullet {
     constructor(x1, y1, r1, d) {
         this.x = x1;
         this.y = y1;
-        this.r = r1;
+        this.r = r1*ratio;
         this.dir = d;
     }
     //iscrtavam ih kao male krugove
@@ -158,8 +163,8 @@ class bigAsteroid {
         this.y = y1;
         this.dir = d;
         this.HP = 15;
-        this.radius = 100;
-        this.speed = 75;
+        this.radius = 100*ratio;
+        this.speed = 75*ratio;
         this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
         this.rotationSpeed = 10;
         this.drawDir = Math.floor(Math.random() * 360);
@@ -170,20 +175,20 @@ class bigAsteroid {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(0, 0 - 100);
-        ctx.lineTo(0 + 30, 0 - 90);
-        ctx.lineTo(0 + 80, 0 - 50);
-        ctx.lineTo(0 + 100, 0);
-        ctx.lineTo(0 + 93, 0 + 30);
-        ctx.lineTo(0 + 53, 0 + 90);
-        ctx.lineTo(0, 0 + 100);
-        ctx.lineTo(0 - 25, 0 + 90);
-        ctx.lineTo(0 - 75, 0 + 50);
-        ctx.lineTo(0 - 95, 0 + 20)
-        ctx.lineTo(0 - 100, 0);
-        ctx.lineTo(0 - 95, 0 - 30);
-        ctx.lineTo(0 - 55, 0 - 80)
-        ctx.lineTo(0, 0 - 100);
+        ctx.moveTo(0, 0 - 100*ratio);
+        ctx.lineTo(0 + 30*ratio, 0 - 90*ratio);
+        ctx.lineTo(0 + 80*ratio, 0 - 50*ratio);
+        ctx.lineTo(0 + 100*ratio, 0);
+        ctx.lineTo(0 + 93*ratio, 0 + 30*ratio);
+        ctx.lineTo(0 + 53*ratio, 0 + 90*ratio);
+        ctx.lineTo(0, 0 + 100*ratio);
+        ctx.lineTo(0 - 25*ratio, 0 + 90*ratio);
+        ctx.lineTo(0 - 75*ratio, 0 + 50*ratio);
+        ctx.lineTo(0 - 95*ratio, 0 + 20*ratio)
+        ctx.lineTo(0 - 100*ratio, 0);
+        ctx.lineTo(0 - 95*ratio, 0 - 30*ratio);
+        ctx.lineTo(0 - 55*ratio, 0 - 80*ratio)
+        ctx.lineTo(0, 0 - 100*ratio);
         ctx.stroke();
         ctx.closePath();
         ctx.restore();
@@ -199,8 +204,8 @@ class mediumAsteroid {
         this.y = y1;
         this.dir = d;
         this.HP = 8;
-        this.radius = 50;
-        this.speed = 100;
+        this.radius = 50*ratio;
+        this.speed = 100*ratio;
         this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
         this.rotationSpeed = 17;
         this.drawDir = Math.floor(Math.random() * 360);
@@ -211,20 +216,20 @@ class mediumAsteroid {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(0, 0 - 50);
-        ctx.lineTo(0 + 15, 0 - 45);
-        ctx.lineTo(0 + 40, 0 - 25);
-        ctx.lineTo(0 + 50, 0);
-        ctx.lineTo(0 + 46.5, 0 + 15);
-        ctx.lineTo(0 + 26.5, 0 + 45);
-        ctx.lineTo(0, 0 + 50);
-        ctx.lineTo(0 - 12.5, 0 + 45);
-        ctx.lineTo(0 - 37.5, 0 + 25);
-        ctx.lineTo(0 - 47.5, 0 + 10)
-        ctx.lineTo(0 - 50, 0);
-        ctx.lineTo(0 - 47.5, 0 - 15);
-        ctx.lineTo(0 - 27.5, 0 - 40)
-        ctx.lineTo(0, 0 - 50);
+        ctx.moveTo(0, 0 - 50*ratio);
+        ctx.lineTo(0 + 15*ratio, 0 - 45*ratio);
+        ctx.lineTo(0 + 40*ratio, 0 - 25*ratio);
+        ctx.lineTo(0 + 50*ratio, 0);
+        ctx.lineTo(0 + 46.5*ratio, 0 + 15*ratio);
+        ctx.lineTo(0 + 26.5*ratio, 0 + 45*ratio);
+        ctx.lineTo(0, 0 + 50*ratio);
+        ctx.lineTo(0 - 12.5*ratio, 0 + 45*ratio);
+        ctx.lineTo(0 - 37.5*ratio, 0 + 25*ratio);
+        ctx.lineTo(0 - 47.5*ratio, 0 + 10*ratio)
+        ctx.lineTo(0 - 50*ratio, 0);
+        ctx.lineTo(0 - 47.5*ratio, 0 - 15*ratio);
+        ctx.lineTo(0 - 27.5*ratio, 0 - 40*ratio)
+        ctx.lineTo(0, 0 - 50*ratio);
         ctx.stroke();
         ctx.closePath();
         ctx.restore();
@@ -240,8 +245,8 @@ class smallAsteroid {
         this.y = y1;
         this.dir = d;
         this.HP = 2;
-        this.radius = 25;
-        this.speed = 150;
+        this.radius = 25*ratio;
+        this.speed = 150*ratio;
         this.rotationDir = (Math.floor(Math.random() * 2) === 1) ? 1 : -1;
         this.rotationSpeed = 30;
         this.drawDir = Math.floor(Math.random() * 360);
@@ -252,25 +257,40 @@ class smallAsteroid {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.drawDir * Math.PI / 180);
         ctx.beginPath();
-        ctx.moveTo(0, 0 - 25);
-        ctx.lineTo(0 + 7.5, 0 - 22.5);
-        ctx.lineTo(0 + 20, 0 - 12.5);
-        ctx.lineTo(0 + 25, 0);
-        ctx.lineTo(0 + 23.25, 0 + 7.5);
-        ctx.lineTo(0 + 13.25, 0 + 22.5);
-        ctx.lineTo(0, 0 + 25);
-        ctx.lineTo(0 - 6.25, 0 + 22.5);
-        ctx.lineTo(0 - 18.75, 0 + 12.25);
-        ctx.lineTo(0 - 23.75, 0 + 5)
-        ctx.lineTo(0 - 25, 0);
-        ctx.lineTo(0 - 23.5, 0 - 7.5);
-        ctx.lineTo(0 - 13.75, 0 - 20)
-        ctx.lineTo(0, 0 - 25);
+        ctx.moveTo(0, 0 - 25*ratio);
+        ctx.lineTo(0 + 7.5*ratio, 0 - 22.5*ratio);
+        ctx.lineTo(0 + 20*ratio, 0 - 12.5*ratio);
+        ctx.lineTo(0 + 25*ratio, 0);
+        ctx.lineTo(0 + 23.25*ratio, 0 + 7.5*ratio);
+        ctx.lineTo(0 + 13.25*ratio, 0 + 22.5*ratio);
+        ctx.lineTo(0, 0 + 25*ratio);
+        ctx.lineTo(0 - 6.25*ratio, 0 + 22.5*ratio);
+        ctx.lineTo(0 - 18.75*ratio, 0 + 12.25*ratio);
+        ctx.lineTo(0 - 23.75*ratio, 0 + 5*ratio)
+        ctx.lineTo(0 - 25*ratio, 0);
+        ctx.lineTo(0 - 23.5*ratio, 0 - 7.5*ratio);
+        ctx.lineTo(0 - 13.75*ratio, 0 - 20*ratio)
+        ctx.lineTo(0, 0 - 25*ratio);
         ctx.stroke();
         ctx.closePath();
         ctx.restore();
     }
 };
+
+let MouseX;
+let MouseY;
+
+document.addEventListener('mousemove', function(e) {
+    let x = e.x-ship.x;
+    let y = e.y-ship.y;
+    MouseX = e.x;
+    MouseY = e.y;
+
+    let angle = Math.atan2(y, x)*180/Math.PI;
+    if (easyMode) {
+        ship.dir = angle+90;
+    }
+})
 
 //array koji sadrzi sve metke i asteroidi
 let bullets = [];
@@ -286,23 +306,25 @@ let mouseOverStartButton = false;
 let mouseOverHelpButton = false;
 
 document.addEventListener('mousemove', function(e) {
-    if(e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
+    if(e.x > canvas.width / 2 - 100*ratio && e.x < canvas.width / 2 + 100*ratio && e.y > canvas.height / 2 - 50*ratio && e.y < canvas.height / 2 + 50*ratio) {
         mouseOverStartButton = true;
     }
     else mouseOverStartButton = false;
     //canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50
-    if(e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
+    if(e.x > canvas.width / 2 - 70*ratio && e.x < canvas.width / 2 + 70*ratio && e.y > canvas.height / 2 + 70*ratio && e.y < canvas.height / 2 + 120*ratio) {
         mouseOverHelpButton = true;
     }
     else mouseOverHelpButton = false;
 });
 document.addEventListener('click', function(e) {
-    if(startScreen && e.x > canvas.width / 2 - 100 && e.x < canvas.width / 2 + 100 && e.y > canvas.height / 2 - 50 && e.y < canvas.height / 2 + 50) {
+    if(startScreen && e.x > canvas.width / 2 - 100*ratio && e.x < canvas.width / 2 + 100*ratio && e.y > canvas.height / 2 - 50*ratio && e.y < canvas.height / 2 + 50*ratio) {
         game = true;
+        ship.dir = 0;
+        ship.moving = false;
         startScreen = false;
         beep.play();
     }
-    if(startScreen & e.x > canvas.width / 2 - 70 && e.x < canvas.width / 2 + 70 && e.y > canvas.height / 2 + 70 && e.y < canvas.height / 2 + 120) {
+    if(startScreen & e.x > canvas.width / 2 - 70*ratio && e.x < canvas.width / 2 + 70*ratio && e.y > canvas.height / 2 + 70*ratio && e.y < canvas.height / 2 + 120*ratio) {
         helpScreen = true;
         startScreen = false;
         beep.play();
@@ -314,15 +336,36 @@ let mouseOverBackButton = false;
 
 document.addEventListener('mousemove', function(e) {
     //ctx.strokeRect(canvas.width - 200, 50, 140, 50);
-    if(e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
+    if(e.x > canvas.width - 200*ratio && e.x < canvas.width - 60*ratio && e.y > 50*ratio && e.y < 100*ratio) {
         mouseOverBackButton = true;
     }
     else mouseOverBackButton = false;
 });
 document.addEventListener('click', function(e) {
-    if(helpScreen & e.x > canvas.width - 200 && e.x < canvas.width - 60 && e.y > 50 && e.y < 100) {
+    if(helpScreen & e.x > canvas.width - 200*ratio && e.x < canvas.width - 60*ratio && e.y > 50*ratio && e.y < 100*ratio) {
         helpScreen = false;
         startScreen = true;
+        beep.play();
+    }
+});
+
+//MODEBUTTON
+let mouseOverModeButton = false;
+
+document.addEventListener('mousemove', function(e) {
+    //ctx.strokeRect(canvas.width - 200, 50, 140, 50);
+    if(e.x > canvas.width / 2 - 70*ratio && e.x < canvas.width / 2 + 70*ratio && e.y > canvas.height / 2 + 140*ratio && e.y < canvas.height / 2 + 190*ratio) {
+        mouseOverModeButton = true;
+    }
+    else mouseOverModeButton = false;
+});
+document.addEventListener('click', function(e) {
+    if(startScreen && mouseOverModeButton && easyMode) {
+        easyMode = false;
+        beep.play();
+    }
+    else if(startScreen && mouseOverModeButton && easyMode == false) {
+        easyMode = true;
         beep.play();
     }
 });
@@ -330,53 +373,55 @@ document.addEventListener('click', function(e) {
 function drawButtons() {
     ctx.strokeStyle = 'white';
 
-    ctx.strokeRect(100, 100, 75, 75);
+    ctx.strokeRect(100*ratio, 100*ratio, 75*ratio, 75*ratio);
     ctx.beginPath();
-    ctx.moveTo(137.5, 160);
-    ctx.lineTo(137.5, 115);
-    ctx.lineTo(157.5, 135);
-    ctx.moveTo(137.5, 115);
-    ctx.lineTo(117.5, 135)
+    ctx.moveTo(137.5*ratio, 160*ratio);
+    ctx.lineTo(137.5*ratio, 115*ratio);
+    ctx.lineTo(157.5*ratio, 135*ratio);
+    ctx.moveTo(137.5*ratio, 115*ratio);
+    ctx.lineTo(117.5*ratio, 135*ratio)
     ctx.stroke();
     ctx.closePath();
 
-    ctx.strokeRect(100, 200, 75, 75);
+    ctx.strokeRect(100*ratio, 200*ratio, 75*ratio, 75*ratio);
     ctx.beginPath();
-    ctx.moveTo(160, 237.5);
-    ctx.lineTo(115, 237.5);
-    ctx.lineTo(135, 217.5);
-    ctx.moveTo(115, 237.5);
-    ctx.lineTo(135, 257.5)
+    ctx.moveTo(160*ratio, 237.5*ratio);
+    ctx.lineTo(115*ratio, 237.5*ratio);
+    ctx.lineTo(135*ratio, 217.5*ratio);
+    ctx.moveTo(115*ratio, 237.5*ratio);
+    ctx.lineTo(135*ratio, 257.5*ratio)
     ctx.stroke();
     ctx.closePath();
 
-    ctx.strokeRect(100, 300, 75, 75);
+    ctx.strokeRect(100*ratio, 300*ratio, 75*ratio, 75*ratio);
     ctx.beginPath();
-    ctx.moveTo(115, 337.5);
-    ctx.lineTo(160, 337.5);
-    ctx.lineTo(140, 317.5);
-    ctx.moveTo(160, 337.5);
-    ctx.lineTo(140, 357.5)
+    ctx.moveTo(115*ratio, 337.5*ratio);
+    ctx.lineTo(160*ratio, 337.5*ratio);
+    ctx.lineTo(140*ratio, 317.5*ratio);
+    ctx.moveTo(160*ratio, 337.5*ratio);
+    ctx.lineTo(140*ratio, 357.5*ratio)
     ctx.stroke();    
     ctx.closePath(); 
     
-    ctx.strokeRect(100, 400, 75, 75);
-    ctx.font = '20px Arial';
-    ctx.strokeText('SPACE', 105, 445);
+    ctx.strokeRect(100*ratio, 400*ratio, 75*ratio, 75*ratio);
+    fontSize = 20*ratio
+    ctx.font = fontSize.toString()+'px Arial';
+    ctx.strokeText('SPACE', 105*ratio, 445*ratio);
 
     
-    ctx.strokeRect(700, 100, 75, 75);
-    ctx.font = '60px Arial';
-    ctx.strokeText('1', 720, 158);
+    ctx.strokeRect(700*ratio, 100*ratio, 75*ratio, 75*ratio);
+    fontSize = 60*ratio
+    ctx.font = fontSize.toString()+'px Arial';
+    ctx.strokeText('1', 720*ratio, 158*ratio);
     
-    ctx.strokeRect(700, 200, 75, 75);
-    ctx.strokeText('2', 720, 258);
+    ctx.strokeRect(700*ratio, 200*ratio, 75*ratio, 75*ratio);
+    ctx.strokeText('2', 720*ratio, 258*ratio);
     
-    ctx.strokeRect(700, 300, 75, 75);
-    ctx.strokeText('3', 720, 358);
+    ctx.strokeRect(700*ratio, 300*ratio, 75*ratio, 75*ratio);
+    ctx.strokeText('3', 720*ratio, 358*ratio);
     
-    ctx.strokeRect(700, 400, 75, 75);
-    ctx.strokeText('4', 720, 458);
+    ctx.strokeRect(700*ratio, 400*ratio, 75*ratio, 75*ratio);
+    ctx.strokeText('4', 720*ratio, 458*ratio);
 }
 
 //STVARI ZA GAMEOVERSCREEN
@@ -386,24 +431,24 @@ let mouseOverRestartBtn = false;
 let restartBtnClicked = false;
 
 document.addEventListener('mousemove', function(e) {
-    if(e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(e.x > canvas.width / 2 - 150*ratio && e.x < canvas.width / 2 - 10*ratio && e.y > canvas.height / 2 + 110*ratio && e.y < canvas.height / 2 + 160*ratio) {
         mouseOverMainMenuBtn = true;
     }
     else mouseOverMainMenuBtn = false;
     
-    if(e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(e.x > canvas.width / 2 + 10*ratio && e.x < canvas.width / 2 + 150*ratio && e.y > canvas.height / 2 + 110*ratio && e.y < canvas.height / 2 + 160*ratio) {
         mouseOverRestartBtn = true;
     }
     else mouseOverRestartBtn = false;
 });
 
 document.addEventListener('click', function(e) {
-    if(gameOver & e.x > canvas.width / 2 - 150 && e.x < canvas.width / 2 - 10 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(gameOver & e.x > canvas.width / 2 - 150*ratio && e.x < canvas.width / 2 - 10*ratio && e.y > canvas.height / 2 + 110*ratio && e.y < canvas.height / 2 + 160*ratio) {
         mainMenuBtnClicked = true;
         beep.play();
     }
     
-    if(gameOver & e.x > canvas.width / 2 + 10 && e.x < canvas.width / 2 + 150 && e.y > canvas.height / 2 + 110 && e.y < canvas.height / 2 + 160) {
+    if(gameOver & e.x > canvas.width / 2 + 10*ratio && e.x < canvas.width / 2 + 150*ratio && e.y > canvas.height / 2 + 110*ratio && e.y < canvas.height / 2 + 160*ratio) {
         restartBtnClicked = true;
         beep.play();
     }
@@ -426,45 +471,68 @@ function update(animationTime) {
         drawScore();
 
         //rotiram brod lijevo
-        if(ship.rotating === 'left') {
-            ship.dir -= 4  * 50 * deltaTime;
-            if(ship.dir < 0) ship.dir = 360 + ship.dir;//ovo je da ne bi bilo npr -3 nego 357   
-        }
-        //rotiram brod desno
-        else if(ship.rotating === 'right') {
-            ship.dir += 4 * 50 * deltaTime;
-            if(ship.dir > 360) ship.dir = ship.dir - 360;//ovo je da ne bi bilo npr 368 nego 8
-        }
+        if (easyMode == false) {
+            if(ship.rotating === 'left') {
+                ship.dir -= 4  * 50 * deltaTime;
+                if(ship.dir < 0) ship.dir = 360 + ship.dir;//ovo je da ne bi bilo npr -3 nego 357   
+            }
+            //rotiram brod desno
+            else if(ship.rotating === 'right') {
+                ship.dir += 4 * 50 * deltaTime;
+                if(ship.dir > 360) ship.dir = ship.dir - 360;//ovo je da ne bi bilo npr 368 nego 8
+            }
 
-        //pomjeram brod u zavisnosti od kursa broda
-        if(ship.moving) {
-            ship.x += Math.sin(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
-            ship.y -= Math.cos(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
+            if(ship.moving) {
+                ship.x += Math.sin(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
+                ship.y -= Math.cos(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
+            }
+
+            if(ship.x < 0) 
+                ship.x = canvas.width + ship.x;
+            
+            else if(ship.x > canvas.width) 
+                ship.x -= canvas.width;
+            
+            if(ship.y < 0) 
+                ship.y = canvas.height + ship.y;
+            
+              else if(ship.y > canvas.height) 
+                ship.y -= canvas.height;
+
+                if(ship.shooting && Date.now() > lastShot + 500/ship.Reload) {//ako je pritisnut spacebar i ako je proslo minimum 150ms od proslog metka
+                    //shipPointX i shipPointY su koordinate vrha broda
+                    let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
+                    let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
+                    let bullet = new Bullet(shipPointX, shipPointY, 1.5, ship.dir);//napravim novi metak
+                    bullets[bullets.length] = bullet;//dodam ga u array
+                    lastShot = Date.now();//stavim da je zadnji metak opaljen sad
+                    blop.play();
+            }
         }
+        else if (easyMode) {
+            if(ship.moving) {
+                ship.x += Math.sin(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
+                ship.y -= Math.cos(ship.dir * Math.PI / 180) * ship.Speed * deltaTime;
+            }
 
-        //ako brod izadje iz canvasa
-        if(ship.x < 0) 
-            ship.x = canvas.width + ship.x;
-            
-        else if(ship.x > canvas.width) 
-            ship.x -= canvas.width;
-            
-        if(ship.y < 0) 
-            ship.y = canvas.height + ship.y;
-            
-        else if(ship.y > canvas.height) 
-            ship.y -= canvas.height;
+            let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
+            let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
 
-            
-        //pravljenje metaka
-        if(ship.shooting && Date.now() > lastShot + 500/ship.Reload) {//ako je pritisnut spacebar i ako je proslo minimum 150ms od proslog metka
+            if(Date.now() > lastShot + 500/ship.Reload) {//ako je pritisnut spacebar i ako je proslo minimum 150ms od proslog metka
                 //shipPointX i shipPointY su koordinate vrha broda
-                let shipPointX = ship.x + Math.sin(ship.dir * Math.PI / 180) * 16;
-                let shipPointY = ship.y - Math.cos(ship.dir * Math.PI / 180) * 16;
                 let bullet = new Bullet(shipPointX, shipPointY, 1.5, ship.dir);//napravim novi metak
                 bullets[bullets.length] = bullet;//dodam ga u array
                 lastShot = Date.now();//stavim da je zadnji metak opaljen sad
                 blop.play();
+            }
+
+            if(Math.round(shipPointX)-2 <= Math.round(MouseX) && Math.round(MouseX) <= Math.round(shipPointX)+2 && Math.round(shipPointY)-2 <= Math.round(MouseY) && Math.round(MouseY) <= Math.round(shipPointY)+2 && easyMode) {
+                ship.moving = false
+            }
+            else if(easyMode) {
+                ship.moving = true
+            }
+
         }
 
         //crtanje metaka
@@ -489,16 +557,16 @@ function update(animationTime) {
             let asteroid;
 
             if(side == 0) {
-                randomAsteroidX = -100;
+                randomAsteroidX = -100*ratio;
             }
             else if(side == 1){
-                randomAsteroidY = -100;
+                randomAsteroidY = -100*ratio;
             }
             else if(side == 2){
-                randomAsteroidX = canvas.width + 100;
+                randomAsteroidX = canvas.width + 100*ratio;
             }
             else if(side == 3){
-                randomAsteroidY = canvas.height + 100;
+                randomAsteroidY = canvas.height + 100*ratio;
             }
 
             if(randomAsteroidSize == 0) {
@@ -522,17 +590,17 @@ function update(animationTime) {
             asteroids[i].x += Math.sin(asteroids[i].dir * Math.PI / 180) * asteroids[i].speed * deltaTime;//pomjeram
             asteroids[i].y -= Math.cos(asteroids[i].dir * Math.PI / 180) * asteroids[i].speed * deltaTime;//asteroid
             //provjeravam da li je citav asteroid izasao iz canvasa
-            if(asteroids[i].x < -101) 
-                asteroids[i].x = canvas.width + 100;
+            if(asteroids[i].x < -101*ratio) 
+                asteroids[i].x = canvas.width + 100*ratio;
             
-            else if(asteroids[i].x > canvas.width+101) 
-                asteroids[i].x = -100;
+            else if(asteroids[i].x > canvas.width+101*ratio) 
+                asteroids[i].x = -100*ratio;
             
-            if(asteroids[i].y < -101) 
-                asteroids[i].y = canvas.height + 100;
+            if(asteroids[i].y < -101*ratio) 
+                asteroids[i].y = canvas.height + 100*ratio;
             
-            else if(asteroids[i].y > canvas.height+101) 
-                asteroids[i].y = -100;
+            else if(asteroids[i].y > canvas.height+101*ratio) 
+                asteroids[i].y = -100*ratio;
         }
         //provjera ako je metak udario asteroid
         for(let i = 0; i < asteroids.length; i++) {
@@ -548,13 +616,13 @@ function update(animationTime) {
                     bullets.splice(m, 1);
                     asteroids[i].HP -= ship.bulletDamage;
                     if (asteroids[i].HP <= 0) {
-                        if(astRadius == 100) {//ako jeste i nije najmanji napravi dva manja asteroida
+                        if(astRadius == 100*ratio) {//ako jeste i nije najmanji napravi dva manja asteroida
                             let asteroid1 = new mediumAsteroid(astX+ Math.sin((astDir+90) * Math.PI / 180), astY - Math.cos((astDir+90) * Math.PI / 180), astDir+90);
                             let asteroid2 = new mediumAsteroid(astX+ Math.sin((astDir-90) * Math.PI / 180), astY - Math.cos((astDir-90) * Math.PI / 180), astDir-90);
                             asteroids[asteroids.length] = asteroid1;
                             asteroids[asteroids.length] = asteroid2;
                         }
-                        else if(astRadius == 50) {//ako jeste i nije najmanji napravi dva manja asteroida
+                        else if(astRadius == 50*ratio) {//ako jeste i nije najmanji napravi dva manja asteroida
                             let asteroid1 = new smallAsteroid(astX+ Math.sin((astDir+90) * Math.PI / 180), astY - Math.cos((astDir+90) * Math.PI / 180), astDir+90);
                             let asteroid2 = new smallAsteroid(astX+ Math.sin((astDir-90) * Math.PI / 180), astY - Math.cos((astDir-90) * Math.PI / 180), astDir-90);
                             asteroids[asteroids.length] = asteroid1;
@@ -594,44 +662,63 @@ function update(animationTime) {
         //posvijetlim dugme ako hoverujem misom preko njega
         if(mouseOverStartButton) {
             ctx.fillStyle = '#111111';
-            ctx.fillRect(canvas.width / 2 - 100, canvas.height / 2 - 50, 200, 100);
+            ctx.fillRect(canvas.width / 2 - 100*ratio, canvas.height / 2 - 50*ratio, 200*ratio, 100*ratio);
         }
         //crtam dugme
         ctx.strokeStyle = 'white';
-        ctx.strokeRect(canvas.width / 2 - 100, canvas.height / 2 - 50, 200, 100);
-        ctx.font = '50px Arial';
-        ctx.strokeText('START', canvas.width / 2 - 80, canvas.height / 2 + 15);
+        ctx.strokeRect(canvas.width / 2 - 100*ratio, canvas.height / 2 - 50*ratio, 200*ratio, 100*ratio);
+        let fontSize = 50*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeText('START', canvas.width / 2 - 80*ratio, canvas.height / 2 + 15*ratio);
 
         if(mouseOverHelpButton) {
             ctx.fillStyle = '#111111';
-            ctx.fillRect(canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50);
+            ctx.fillRect(canvas.width / 2 - 70*ratio, canvas.height / 2 + 70*ratio, 140*ratio, 50*ratio);
         }
-        ctx.font = '30px Arial';
-        ctx.strokeRect(canvas.width / 2 - 70, canvas.height / 2 + 70, 140, 50);
-        ctx.strokeText('HELP', canvas.width / 2 - 40, canvas.height / 2 + 105);
+        fontSize = 30*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeRect(canvas.width / 2 - 70*ratio, canvas.height / 2 + 70*ratio, 140*ratio, 50*ratio);
+        ctx.strokeText('HELP', canvas.width / 2 - 40*ratio, canvas.height / 2 + 105*ratio);
+
+        if(mouseOverModeButton) {
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(canvas.width / 2 - 70*ratio, canvas.height / 2 + 140*ratio, 140*ratio, 50*ratio);
+        }
+        fontSize = 28*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeRect(canvas.width / 2 - 70*ratio, canvas.height / 2 + 140*ratio, 140*ratio, 50*ratio);
+        if (easyMode) {
+            ctx.strokeText('EASY', canvas.width / 2 - 40*ratio, canvas.height / 2 + 175*ratio);
+        }
+        else {
+            ctx.strokeText('HARD', canvas.width / 2 - 40*ratio, canvas.height / 2 + 175*ratio);
+        }
     }
 
     else if(gameOver) {
-        ctx.font = '50px Arial';
+        fontSize = 50*ratio
+        ctx.font = fontSize.toString()+'px Arial';
         ctx.strokeStyle = 'white';
-        ctx.strokeText('GAME OVER', canvas.width / 2 - 150, canvas.height / 2 + 15);
-        ctx.font = "40px Arial";
-        ctx.strokeText('Score: '+score, canvas.width / 2 - 70,canvas.height / 2 + 75);
+        ctx.strokeText('GAME OVER', canvas.width / 2 - 150*ratio, canvas.height / 2 + 15*ratio);
+        fontSize = 40*ratio
+        ctx.font = fontSize.toString()+"px Arial";
+        ctx.strokeText('Score: '+score, canvas.width / 2 - 70*ratio,canvas.height / 2 + 75*ratio);
         
         if(mouseOverMainMenuBtn) {
             ctx.fillStyle = '#111111';
-            ctx.fillRect(canvas.width/2 - 150, canvas.height/2 + 110, 140, 50);
+            ctx.fillRect(canvas.width/2 - 150*ratio, canvas.height/2 + 110*ratio, 140*ratio, 50*ratio);
         }
-        ctx.strokeRect(canvas.width/2 - 150, canvas.height/2 + 110, 140, 50);
-        ctx.font = '20px Arial';
-        ctx.strokeText('MAIN MENU', canvas.width / 2 - 137, canvas.height / 2 + 141.5);
+        ctx.strokeRect(canvas.width/2 - 150*ratio, canvas.height/2 + 110*ratio, 140*ratio, 50*ratio);
+        fontSize = 20*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeText('MAIN MENU', canvas.width / 2 - 137*ratio, canvas.height / 2 + 141.5*ratio);
         
         if(mouseOverRestartBtn) {
             ctx.fillStyle = '#111111';
-            ctx.fillRect(canvas.width/2 + 10, canvas.height/2 + 110, 140, 50);
+            ctx.fillRect(canvas.width/2 + 10*ratio, canvas.height/2 + 110*ratio, 140*ratio, 50*ratio);
         }
-        ctx.strokeRect(canvas.width/2 + 10, canvas.height/2 + 110, 140, 50);
-        ctx.strokeText('RESTART', canvas.width / 2 + 35, canvas.height / 2 + 141.5);
+        ctx.strokeRect(canvas.width/2 + 10*ratio, canvas.height/2 + 110*ratio, 140*ratio, 50*ratio);
+        ctx.strokeText('RESTART', canvas.width / 2 + 35*ratio, canvas.height / 2 + 141.5*ratio);
 
         if(mainMenuBtnClicked) {
             window.setTimeout(() => document.location.reload(), 100);
@@ -648,10 +735,10 @@ function update(animationTime) {
             ship.rotating = 'stop'; 
             ship.moving = false;
             ship.shooting = false;
-            ship.Speed = 120;
+            ship.Speed = 120*ratio;
             ship.Reload = 1;
             ship.bulletDamage = 2;
-            ship.bulletSpeed = 1;
+            ship.bulletSpeed = 1*ratio;
 
             restartBtnClicked = false;
             game = true;
@@ -660,31 +747,34 @@ function update(animationTime) {
     }
 
     else if(helpScreen) {
-        ctx.font = '35px Arial';
+        fontSize = 30*ratio
+        ctx.font = fontSize.toString()+'px Arial';
         
-        ctx.strokeText('Move the ship forward', 200, 150);
-        ctx.strokeText('Rotate the ship left', 200, 250);
-        ctx.strokeText('Rotate the ship right', 200, 350);
-        ctx.strokeText('Shoot', 200, 450);
+        ctx.strokeText('Move the ship forward', 200*ratio, 150*ratio);
+        ctx.strokeText('Rotate the ship left', 200*ratio, 250*ratio);
+        ctx.strokeText('Rotate the ship right', 200*ratio, 350*ratio);
+        ctx.strokeText('Shoot', 200*ratio, 450*ratio);
 
-        ctx.strokeText("Upgrade the ship's speed", 800, 150);
-        ctx.strokeText("Upgrade the ship's firerate", 800, 250);
-        ctx.strokeText("Upgrade the ship's bullet damage", 800, 350);
-        ctx.strokeText("Upgrade the ship's bullet speed", 800, 450);
+        ctx.strokeText("Upgrade the ship's speed", 800*ratio, 150*ratio);
+        ctx.strokeText("Upgrade the ship's firerate", 800*ratio, 250*ratio);
+        ctx.strokeText("Upgrade the ship's bullet damage", 800*ratio, 350*ratio);
+        ctx.strokeText("Upgrade the ship's bullet speed", 800*ratio, 450*ratio);
         
         drawButtons();
 
-        ctx.font = '35px Arial';
-        ctx.strokeText('Destroy an asteroid to increment your score and points', 270, 540);
-        ctx.strokeText('To upgrade a stat, you need 5 points', 400, 600);
+        fontSize = 35*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeText('Destroy an asteroid to increment your score and points', 270*ratio, 540*ratio);
+        ctx.strokeText('To upgrade a stat, you need 5 points', 400*ratio, 600*ratio);
 
         if(mouseOverBackButton) {
             ctx.fillStyle = '#111111';
-            ctx.fillRect(canvas.width - 200, 50, 140, 50);
+            ctx.fillRect(canvas.width - 200*ratio, 50*ratio, 140*ratio, 50*ratio);
         }
-        ctx.strokeRect(canvas.width - 200, 50, 140, 50);
-        ctx.font = '25px Arial';
-        ctx.strokeText('BACK', canvas.width - 165, 83);
+        ctx.strokeRect(canvas.width - 200*ratio, 50*ratio, 140*ratio, 50*ratio);
+        fontSize = 25*ratio
+        ctx.font = fontSize.toString()+'px Arial';
+        ctx.strokeText('BACK', canvas.width - 165*ratio, 83*ratio);
     }
 
     window.requestAnimationFrame(() => update(lastAnimationTime));
@@ -696,12 +786,15 @@ if (gameOver == false) {
 
 //crtam score
 function drawScore(){
-    ctx.font = "16px Arial";
+    ctx.font = '16px Arial';
     ctx.fillStyle = "white";
     ctx.fillText('Score: '+score, 8,20);
-    ctx.fillText('Points: '+points, 8,35);
-    ctx.fillText('Bullet Speed: '+ship.bulletSpeed, 8,canvas.height-15);
-    ctx.fillText('Bullet Damage: '+ship.bulletDamage, 8,canvas.height-30);
-    ctx.fillText('Firerate: '+ship.Reload, 8,canvas.height-45);
-    ctx.fillText('Speed: '+ship.Speed, 8,canvas.height-60);
+
+    if (easyMode == false) {
+        ctx.fillText('Points: '+points, 8*ratio,35*ratio);
+        ctx.fillText('Bullet Speed: '+Math.round(ship.bulletSpeed), 8*ratio,canvas.height-15*ratio);
+        ctx.fillText('Bullet Damage: '+ship.bulletDamage, 8*ratio,canvas.height-30*ratio);
+        ctx.fillText('Firerate: '+ship.Reload, 8*ratio,canvas.height-45*ratio);
+        ctx.fillText('Speed: '+Math.round(ship.Speed), 8*ratio,canvas.height-60*ratio);
+    }
 }
